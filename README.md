@@ -4,6 +4,8 @@ This project is a real-time server status monitoring system for instances hosted
 
 It lets you display the status of your configured instances directly on your WordPress website. You and your community can instantly see whether servers are online, how long they’ve been up, and how much CPU or RAM they’re using — all in a clean, live-updating visual.
 
+![Relay Screenshot](https://i.ibb.co/Kt2ps5m/Screenshot-2025-05-24-231853.png)
+
 ---
 
 # ⚙️ How Does It Work?
