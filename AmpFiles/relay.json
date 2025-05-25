@@ -1,0 +1,15 @@
+{
+  "logging": false,
+  "instances": {
+    "Rust: Server Name": {
+      "host": "http://127.0.0.1:8081/",
+      "username": "api_user",
+      "password": "api_pass"
+    },
+    "Minecraft: Server Name": {
+      "host": "http://127.0.0.1:8082/",
+      "username": "api_user",
+      "password": "api_pass"
+    }
+  }
+}
