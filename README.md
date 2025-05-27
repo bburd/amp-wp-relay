@@ -18,7 +18,7 @@ It lets you display the status of your configured instances directly on your Wor
 
 ### AMP Relay Script (runs on your AMP server)
 
-- A PHP file (`amp-status-relay.php`) securely logs into your AMP panel using a special API account.
+- A PHP file (`amp-status-relay.php`) securely logs into your AMP panel using an API account you set up with restricted permissions.
 - It fetches important data like uptime, CPU/RAM usage, and whether the instance and application is running.
 - It sends that data back in a compact JSON format.
 - You configure which AMP instances it should talk to via a simple `relay.json` file.

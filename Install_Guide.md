@@ -14,7 +14,7 @@
 - Ubuntu/Debian AMP server  
 - AMP instances running on `localhost`  
 - PHP, cURL, and a web server (e.g., Nginx)
-- An account with restricted permissions (Allow ONLY the "Manage" permission for each instance configured, deny ALL others)
+- Create an account with restricted permissions (Allow ONLY the "Manage" permission for each instance configured, deny ALL others)
 
 ---
 
