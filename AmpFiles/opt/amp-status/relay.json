@@ -1,0 +1,21 @@
+{
+  "logging": false,
+  "instances": {
+    "Minecraft: Server Name": {
+      "host": "http://127.0.0.1:8081/",
+      "username": "api_user",
+      "password": "api_pass",
+      "ip_port": "serverip:port",
+      "connect": "steam://run/440900//+connect%20123.45.67.8:9098",
+      "alias": "mcserver"
+    },
+    "Rust: Server Name": {
+      "host": "http://127.0.0.1:8082/",
+      "username": "api_user",
+      "password": "api_pass",
+      "ip_port": "",
+      "connect": "",
+      "alias": "rustserver"
+    }
+  }
+}
