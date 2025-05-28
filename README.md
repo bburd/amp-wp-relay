@@ -20,6 +20,7 @@ It lets you display the status of your configured instances directly on your Wor
 
 - A PHP file (`amp-status-relay.php`) securely logs into your AMP panel using an API account you set up with restricted permissions.
 - It fetches important data like uptime, CPU/RAM usage, and whether the instance and application is running.
+- A small file-based cache ensures faster responses and reduced load, using safe file locking.
 - It sends that data back in a compact JSON format.
 - You configure which AMP instances it should talk to via a simple `relay.json` file.
 
@@ -27,11 +28,21 @@ It lets you display the status of your configured instances directly on your Wor
 
 - A plugin reads that JSON data from the relay.
 - It saves a copy of the data temporarily to reduce traffic (15 min refresh).
-- It displays server status as cards using a shortcode like `[amp_server_status]`.
+- It displays server status as cards using a shortcode like `[amp_status alias="mcserver"]`.
 - It has an admin settings page where you can:
   - Set the relay URL
   - Enter your private key
   - Manually refresh the server data with one click
+  - Edit basic card styling settings
+
+---
+
+# 🛡️ Security & Caching Features
+The relay uses a shared key you create and update regularly to protect access. This key is stored in a .env file and should never be exposed.
+
+File-based caching (with locking) is used to reduce unnecessary AMP API calls and improve performance. It updates every 15 seconds by default.
+
+Sensitive files (.env, relay.json, cache.json) are stored outside the web root by default and are not publicly accessible.
 
 ---
 

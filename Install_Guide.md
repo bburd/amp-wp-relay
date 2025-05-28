@@ -1,7 +1,7 @@
 > # ⚠️ **Important Security Notice**
 >
 > Update your **AMP_SHARED_KEY** regularly (Use backups/game wipes/calendar reminders or whatever it takes to remember)!
-> - Change it in your `.env` file on the AMP server.
+> - Change it in your `.env` file on the AMP server (opt/amp-status).
 > - Then update it in WordPress under Settings > **AMP Server Status**.
 > 
 > ### Keeping your key secure is critical to preventing unauthorized access.
@@ -14,7 +14,7 @@
 - Ubuntu/Debian AMP server  
 - AMP instances running on `localhost`  
 - PHP, cURL, and a web server (e.g., Nginx)
-- Create an account with restricted permissions (Allow ONLY the "Manage" permission for each instance configured, deny ALL others)
+- Create an account in AMP and a role for it with restricted permissions (Allow ONLY the "Manage" permission for each instance configured, deny ALL others)
 
 ---
 
@@ -30,8 +30,8 @@ sudo apt install php php-cli php-curl php-fpm unzip nginx -y
 ## 📂 Step 2: Setup Directory
 
 ```bash
-sudo mkdir -p /var/www/amp-status
-cd /var/www/amp-status
+sudo mkdir -p /opt/amp-status
+cd /opt/amp-status
 ```
 
 Upload the following files to this directory:
@@ -44,6 +44,7 @@ Upload the following files to this directory:
 
 ## 📝 Step 3: Configure `.env`
 
+Create a long key, and change it regularly.
 ```env
 AMP_SHARED_KEY=YourSecureKeyHere
 ```
@@ -54,17 +55,23 @@ AMP_SHARED_KEY=YourSecureKeyHere
 
 ```json
 {
-  "logging": false,
+  "logging": false,  <-------- Logging to /opt/amp-status/amp-relay.log
   "instances": {
-    "Rust: Server Name": {
-      "host": "http://127.0.0.1:8081/",
-      "username": "api_user",
-      "password": "api_pass"
+    "Minecraft: Server Name": {  <-------- Displays on card
+      "host": "http://127.0.0.1:8081/",  <-------- Should always be http://127.0.0.1:xxxx the port numbers for the instances usually start at 8081 and go up
+      "username": "api_user", <-------- A user you create in AMP that you should restrict permissions for via a role
+      "password": "api_pass", <-------- Make it a decent password and don't be afraid to change it occasionally
+      "ip_port": "serverip:port", <-------- Displays on the card, leave blank to hide it.
+      "connect": "steam://run/440900//+connect%20123.45.67.8:9098", <-------- A link displayed on the card as 🔗 Connect, leave blank to hide it.
+      "alias": "mcserver"  <-------- Used for the shortcode [amp_status alias="mcserver"]
     },
-    "Minecraft: Server Name": {
+    "Rust: Server Name": {
       "host": "http://127.0.0.1:8082/",
       "username": "api_user",
-      "password": "api_pass"
+      "password": "api_pass",
+      "ip_port": "",
+      "connect": "",
+      "alias": "rustserver"
     }
   }
 }
@@ -75,15 +82,41 @@ AMP_SHARED_KEY=YourSecureKeyHere
 ## 🔐 Step 5: Set Permissions
 
 ```bash
-sudo chown -R www-data:www-data /var/www/amp-status
-sudo chmod -R 750 /var/www/amp-status
+sudo chown -R www-data:www-data /opt/amp-status
+sudo chmod -R 750 /opt/amp-status
 ```
+
+**Important:** Make sure your web server user (e.g., `www-data`) can read/write to the directory.
 
 ---
 
-## 🌍 Step 6: Access the Relay
+## ⚙️ Step 6: Configure Nginx for PHP
 
-Open in your browser to verify there is data:
+Ensure your Nginx site config contains a block like this or is uncommented to process PHP files:
+
+```nginx
+Can be located in /etc/nginx/sites-available/default
+	# pass PHP scripts to FastCGI server
+	#
+	location ~ \.php$ {
+	include snippets/fastcgi-php.conf;
+	fastcgi_pass unix:/run/php/php8.2-fpm.sock; # Adjust PHP version as needed.
+	}
+```
+
+Without this, PHP files like `amp-status-relay.php` will not be executed.
+
+---
+
+## 📄 Step 7: Place the Relay Script
+
+Place the `amp-status-relay.php` file in your web server’s public directory, usually:
+
+```bash
+/var/www/html/
+```
+
+Make sure it's accessible via the URL:
 
 ```
 https://panel.yourdomain.xyz/amp-status-relay.php?key=YourSecureKeyHere
@@ -91,9 +124,24 @@ https://panel.yourdomain.xyz/amp-status-relay.php?key=YourSecureKeyHere
 
 ---
 
-## ✅ All Set!
+## 📄 Best Practice: Confirm `/opt/amp-status` is Not Publicly Accessible
 
-Your AMP Status Relay is now running and accessible.
+To verify that sensitive files like `.env`, `relay.json`, or `cache.json` aren't accessible via the web:
+
+```bash
+curl -I https://yourdomain.com/opt/amp-status/.env
+```
+
+If you get `403 Forbidden` or `404 Not Found`, you're safe. If you see `200 OK`, **fix immediately**.
+
+If you *are* using `/opt/amp-status` within your web root (not recommended), block it with Nginx:
+
+```nginx
+location ~* /\.(env|json|log)$ {
+    deny all;
+    return 403;
+}
+```
 
 ---
 
@@ -124,12 +172,12 @@ This guide walks you through installing and configuring the `amp-status.php` plu
    ```
    amp-status
    ```
-4. Inside the new folder, create a file named:
+4. Inside the new folder, upload or create a file named:
 
    ```
    amp-status.php
    ```
-5. Paste the plugin code into this file.
+5. If you created a new file instead of uploading. Open amp-status.php with a text editor and copy/paste the code into this file.
 
 ---
 
@@ -162,12 +210,12 @@ This guide walks you through installing and configuring the `amp-status.php` plu
 
 ---
 
-## 🧪 Step 4: Use the Shortcode
+## 🥪 Step 4: Use the Shortcode
 
-Place this shortcode anywhere on your WordPress site:
+Place this shortcode anywhere on your WordPress site (alias configured in the relay.json in /opt/amp-status):
 
 ```shortcode
-[amp_server_status]
+[amp_status alias="mcserver"]
 ```
 
 Recommended usage:
