@@ -1,5 +1,7 @@
 ## ⚠️ **Disclaimer**
 
+### Not currently maintained!
+
 This project was built by ChatGPT to suit my own needs, and I’m sharing it in case it helps someone else.  
 Use it at your own risk — no guarantees, warranties, or promises of support are provided.
 
