@@ -1,8 +1,7 @@
-> ## ⚠️ **Disclaimer**
->
-> I'm not a professional developer — and my commit history probably makes that pretty clear.  
-> This project was built by ChatGPT to suit my own needs, and I’m sharing it in case it helps someone else.  
-> Use it at your own risk — no guarantees, warranties, or promises of support are provided.
+## ⚠️ **Disclaimer**
+
+This project was built by ChatGPT to suit my own needs, and I’m sharing it in case it helps someone else.  
+Use it at your own risk — no guarantees, warranties, or promises of support are provided.
 
 # 🔍 What Is This Project?
 
@@ -38,11 +37,12 @@ It lets you display the status of your configured instances directly on your Wor
 ---
 
 # 🛡️ Security & Caching Features
-The relay uses a shared key you create and update regularly to protect access. This key is stored in a .env file and should never be exposed.
+
+The relay uses a shared key you create and update regularly to protect access. This key is stored in a `.env` file and should never be exposed.
 
 File-based caching (with locking) is used to reduce unnecessary AMP API calls and improve performance. It updates every 15 seconds by default.
 
-Sensitive files (.env, relay.json, cache.json) are stored outside the web root by default and are not publicly accessible.
+Sensitive files (`.env`, `relay.json`, `cache.json`) are stored outside the web root by default and are not publicly accessible.
 
 ---
 
